@@ -16,7 +16,7 @@ import math
 STATE_COUNT_THRESHOLD = 3
 PUBLISH_RATE = 50
 USE_CLASSIFIER = True
-EARLY_WARNING_DISTANCE = 80
+EARLY_WARNING_DISTANCE = 100 # > 11*11/2
 
 
 class TLDetector(object):
@@ -96,10 +96,6 @@ class TLDetector(object):
 	    # The premise for publishing traffic light info is image detected
 	    if self.has_image:
 		stop_line_index, light_state = self.process_traffic_lights()
-		#CHECK#
-		#stop_line_index -= 10
-		#rospy.logwarn('ligth state now: %s', light_state)
-		#######
         	'''
         	Publish upcoming red lights at camera frequency.
         	Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
@@ -120,6 +116,64 @@ class TLDetector(object):
 
 	    rate.sleep()
 
+
+    def process_traffic_lights(self):
+        """Finds closest visible traffic light, if one exists, and determines its
+            location and color
+	This function uses self.current_pose, self.base_waypoints_list, and
+	self.camera_image informations to update the stop_line_index and
+	light_state features.
+
+	It will be used after we knew the self.has_image is True. But 
+	self.current_pose and self.current_waypoints_list are possibly None. No 
+	worry for self.config. It already there when you run this function.
+
+        Returns:
+            int: stop_line_index, index of waypoint closes to the upcoming stop line for a traffic light (-1 if none exists)
+            int: light_state, ID of traffic light color (specified in styx_msgs/TrafficLight)
+        """
+	stop_line_index = -1
+	light_state = TrafficLight.UNKNOWN
+
+	if self.current_pose is None or self.base_waypoints_list is None:
+	    return stop_line_index, light_state
+	#if self.stop_line_positions is None:
+	#    return stop_line_index, light_state
+
+
+	##############
+	# In the following, self.current_pose and self.base_waypoints_list are
+	# not None and We get self.camera_image info
+	##############
+	# find the vehicle's position
+	# Since self.current_pos and self.base_waypoints_list are not None
+	# car_position has a meaningful value
+	car_position = self.get_closest_waypoint_index(self.current_pose)
+
+        # find the closest stop line index
+	stop_index = self.find_closet_stop_index(car_position) 
+	if self.distance(self.base_waypoints_list, car_position, stop_index) >=  self.early_warning_distance:
+	    return stop_line_index, light_state
+	# Otherwise, the stop_index will be set as final stop_line_index
+	stop_line_index = stop_index
+	# Next, we update the light_state information
+	if USE_CLASSIFIER:
+	    light_state = self.get_light_state(None)   
+	    return stop_line_index, light_state # REVISE LATER
+	else:
+	    # use the data from the topic /vehicle/traffic_lights self.lights
+	    for light in self.lights:
+	        p1 = light.pose.pose
+		p2 = self.base_waypoints_list[stop_index].pose.pose
+		# 40 should be enogh. One can check this by investigating the
+		# difference between sim_traffic_light_config.yaml and message from 
+		# /vehicle/traffic_lights obtained by the command 'rosmsg echo ...'
+	        if self.distance_2D(p1, p2) < 40.:
+		    light_state = light.state
+		    break
+	    return stop_line_index, light_state
+
+        return -1, TrafficLight.UNKNOWN
 
 
     def current_pose_cb(self, msg):
@@ -349,73 +403,16 @@ class TLDetector(object):
 	None. 
  	In this function, we calculate and update the value of early warning
 	distance self.early_warning_distance. 
+
 	This function was not used in the present version (process_traffic_lights)
 	'''
 	if self.current_velocity is None:
 	    self.early_warning_distance = EARLY_WARNING_DISTANCE
-	self.early_warning_distance = EARLY_WARNING_DISTANCE
-	
-
-    def process_traffic_lights(self):
-        """Finds closest visible traffic light, if one exists, and determines its
-            location and color
-	This function uses self.current_pose, self.base_waypoints_list, and
-	self.camera_image informations to update the stop_line_index and
-	light_state features.
-
-	It will be used after we knew the self.has_image is True. But 
-	self.current_pose and self.current_waypoints_list are possibly None. No 
-	worry for self.config. It already there when you run this function.
-
-        Returns:
-            int: stop_line_index, index of waypoint closes to the upcoming stop line for a traffic light (-1 if none exists)
-            int: light_state, ID of traffic light color (specified in styx_msgs/TrafficLight)
-        """
-	stop_line_index = -1
-	light_state = TrafficLight.UNKNOWN
-
-	if self.current_pose is None or self.base_waypoints_list is None:
-	    return stop_line_index, light_state
-	#if self.stop_line_positions is None:
-	#    return stop_line_index, light_state
-
-
-	##############
-	# In the following, self.current_pose and self.base_waypoints_list are
-	# not None and We get self.camera_image info
-	##############
-	# find the vehicle's position
-	# Since self.current_pos and self.base_waypoints_list are not None
-	# car_position has a meaningful value
-	car_position = self.get_closest_waypoint_index(self.current_pose)
-
-	#rospy.loginfo('car_position = %s', car_position)
-
-        # find the closest stop line index
-	stop_index = self.find_closet_stop_index(car_position) 
-	if self.distance(self.base_waypoints_list, car_position, stop_index) >=  self.early_warning_distance:
-	    return stop_line_index, light_state
-	# Otherwise, the stop_index will be set as final stop_line_index
-	stop_line_index = stop_index
-	# Next, we update the light_state information
-	if USE_CLASSIFIER:
-	    light_state = self.get_light_state(None)   
-	    return stop_line_index, light_state # REVISE LATER
 	else:
-	    # use the data from the topic /vehicle/traffic_lights self.lights
-	    for light in self.lights:
-	        p1 = light.pose.pose
-		p2 = self.base_waypoints_list[stop_index].pose.pose
-		# 40 should be enogh. One can check this by investigating the
-		# difference between sim_traffic_light_config.yaml and message from 
-		# /vehicle/traffic_lights obtained by the command 'rosmsg echo ...'
-	        if self.distance_2D(p1, p2) < 40.:
-		    light_state = light.state
-		    break
-	    return stop_line_index, light_state
-
-        return -1, TrafficLight.UNKNOWN
-
+	    # from dbw node parameters I found the decelerate is less than 1
+	    # S = (vt-v0)**2/(2*a), here vt = 0, a = 1
+	    self.early_warning_distance = self.current_velocity*self.current_velocity/2+1
+	
 if __name__ == '__main__':
     try:
         TLDetector()
