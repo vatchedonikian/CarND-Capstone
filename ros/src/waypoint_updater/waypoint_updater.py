@@ -210,7 +210,7 @@ class WaypointUpdater(object):
 	waypoint_prev = self.current_waypoints_list[0]
 	v0 = self.get_waypoint_velocity(waypoint_prev)
 	if v0 == 0 or self.previous_state is None:
-	    v0 = 1.0
+	    v0 = 2.0
 	    self.set_waypoint_velocity(self.current_waypoints_list, 0, v0)
 	dist_prev = 0.0
 	for i in range(1, len(self.current_waypoints_list)):
@@ -270,8 +270,8 @@ class WaypointUpdater(object):
 	    waypoint = self.current_waypoints_list[i]
 	    dist_prev += self.distance_euclid(waypoint.pose.pose.position, waypoint_prev.pose.pose.position)
 	    vi = math.sqrt(2*deceleration*dist_prev)
-	    #if vi < 1.0:
-		#vi = 0.0
+	    if vi < 1.0:
+		vi = 0.0
 	    self.set_waypoint_velocity(self.current_waypoints_list, i, vi)
 	    waypoint_prev = waypoint
 	# v0 should be less than self.max_velocity.
