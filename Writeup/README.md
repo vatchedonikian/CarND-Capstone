@@ -56,5 +56,15 @@ Copied from Terminal
        waypoint_loader (waypoint_loader/waypoint_loader.py)
        waypoint_updater (waypoint_updater/waypoint_updater.py)
 
-We can also use commands like `rosparam list`. 
-The commands `rostopic list`, `rostopic info`, `rosmsg info`, `rosmsg list` are helped me a lot when I need to make clear the data types.
+We can also use commands like `rosparam list`, `rosparam get`, `rosparam set`.
+
+### 4. How to check the data type transfered between nodes
+Check the operating ros topics
+```
+    rostopic list
+    rostopic info
+```
+Check the msg info
+```
+    rosmsg info #msg type's name#
+```
