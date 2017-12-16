@@ -52,4 +52,5 @@ Copied from Terminal
        waypoint_loader (waypoint_loader/waypoint_loader.py)
        waypoint_updater (waypoint_updater/waypoint_updater.py)
 
-Of course, we can also use comman like
+We can also use commands like `rosparam list`. 
+The commands `rostopic list` `rostopic info` `rosmsg info` `rosmsg list` are helped me a lot when I need to make clear the data types.
