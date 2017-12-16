@@ -10,6 +10,10 @@
     nano waypoint_loader.launch
     ##change 'wp_yaw_const.csv' to 'churchlot_with_cars.csv'
     ##change velocity value to 40 and save
+    cat waypoint_loader.launch
+    cd ../../..
+    catkin_make
+    source devel/setup.sh
 ```
 
 ### 2. clean logs
