@@ -51,3 +51,5 @@ Copied from Terminal
        unity_simulator (styx/unity_simulator_launcher.sh)
        waypoint_loader (waypoint_loader/waypoint_loader.py)
        waypoint_updater (waypoint_updater/waypoint_updater.py)
+
+Of course, we can also use comman like
