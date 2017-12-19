@@ -1,3 +1,10 @@
+## Recent Changes
+ * Upload a new file waypoint_updater_loop_corrected.py to waypoint_updater
+   Time: 19.12.2017
+   Issue: add loop feature so that the car can run around the track, depending on the global variable LOOP (False or True) of waypoint_updater_loop_corrected.py
+   Note. To run in 'Test Lot' environment of simulater v1.3, see 1.
+
+
 ### 1. Settings for testing in 'Test Lot' environment in Simulator in v1.3
 
 Since len(self.base_waypoints_list) equals 61, before testing in 'Test Lot' envirnoment we should adjust the global variable of waypoint_updater.py as follows.
@@ -16,7 +23,7 @@ Change the uploading route in waypoint_loader.py so that it uses corrent waypoin
     cd launch && ls
     nano waypoint_loader.launch
     ##change 'wp_yaw_const.csv' to 'churchlot_with_cars.csv'
-    ##change velocity value to 40 and save
+    ##change velocity value to 10 and save
     cat waypoint_loader.launch
     cd ../../..
     catkin_make
