@@ -1,5 +1,12 @@
 ### 1. Settings for testing in 'Test Lot' environment in Simulator in v1.3
 
+Since len(self.base_waypoints_list) equals 61, before testing in 'Test Lot' envirnoment we should adjust the global variable of waypoint_updater.py as follows.
+
+* LOOKAHEAD_WPS_INIT = 20
+
+&
+
+Change the uploading route in waypoint_loader.py so that it uses corrent waypoints data.
 ```    
     source devel/setup.sh
     #cd launch && ls
