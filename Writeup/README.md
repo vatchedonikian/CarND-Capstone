@@ -1,4 +1,6 @@
 ## Recent Changes
+ * Time 22.12.2017
+   Issue: upload a new file waypoint_updater_12_22.py to waypoint_updater fold.
  * Upload a new file waypoint_updater_loop_corrected.py to waypoint_updater
    Time: 19.12.2017
    Issue: add loop feature so that the car can run around the track, depending on the global variable LOOP (False or True) of waypoint_updater_loop_corrected.py
