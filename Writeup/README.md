@@ -1,4 +1,6 @@
 ## Recent Changes
+ * Time 23.12.2017
+   Issue: update tl_detector.py by set 'EARLY_WARNING_DISTANCE = 80 # > 11*11/2  2.8*2.8/2' and 'self.simulator = True'
  * Time 22.12.2017
    Issue: upload a new file waypoint_updater_12_22.py to waypoint_updater fold.
  * Upload a new file waypoint_updater_loop_corrected.py to waypoint_updater
