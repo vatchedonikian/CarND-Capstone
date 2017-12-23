@@ -1,12 +1,12 @@
 
 ## Structure
-
+```
 pure_pursuit.cpp
     |
     |--pure_pursuit_core.h + pure_pursuit_core.cpp
            |
            |- libwaypoint_follower.h + libwaypoint_follower.cpp
-
+```
 
 ### waypoint_follower/include/libwaypoint_follower.h
 
