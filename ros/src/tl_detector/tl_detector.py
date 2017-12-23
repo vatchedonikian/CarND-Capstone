@@ -15,15 +15,17 @@ import math
 
 STATE_COUNT_THRESHOLD = 3
 PUBLISH_RATE = 50
-USE_CLASSIFIER = True
-EARLY_WARNING_DISTANCE = 100 # > 11*11/2
+USE_CLASSIFIER = False
+EARLY_WARNING_DISTANCE = 80 # > 11*11/2  2.8*2.8/2
 
 
 class TLDetector(object):
     def __init__(self):
         rospy.init_node('tl_detector')
 	
-	self.simulator = USE_CLASSIFIER
+	#self.simulator = USE_CLASSIFIER
+	self.simulator = True
+	
 
 	# current pose of the vehicle, composed of position and orientation info
         self.current_pose = None
@@ -92,7 +94,7 @@ class TLDetector(object):
 	rate = rospy.Rate(PUBLISH_RATE)
 
 	while not rospy.is_shutdown():
-
+	    
 	    # The premise for publishing traffic light info is image detected
 	    if self.has_image:
 		stop_line_index, light_state = self.process_traffic_lights()
@@ -110,8 +112,10 @@ class TLDetector(object):
 	            stop_line_index = stop_line_index if light_state == TrafficLight.RED or light_state == TrafficLight.YELLOW else -1
 	            self.last_stop_line_index = stop_line_index
 	            self.upcoming_red_light_pub.publish(Int32(stop_line_index))
+		    #rospy.logwarn('1.Publishing traffic_waypoint: %s', Int32(stop_line_index))
 	        else:
 	            self.upcoming_red_light_pub.publish(Int32(self.last_stop_line_index))
+		    #rospy.logwarn('2.Publishing traffic_waypoint: %s', Int32(stop_line_index))
 	        self.state_count += 1
 
 	    rate.sleep()
@@ -413,6 +417,9 @@ class TLDetector(object):
 	    # S = (vt-v0)**2/(2*a), here vt = 0, a = 1
 	    self.early_warning_distance = self.current_velocity*self.current_velocity/2+1
 	
+
+
+
 if __name__ == '__main__':
     try:
         TLDetector()
