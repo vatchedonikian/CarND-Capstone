@@ -1,4 +1,3 @@
-
 MIN_NUM = float('-inf')
 MAX_NUM = float('inf')
 
@@ -10,8 +9,19 @@ class PID(object):
         self.kd = kd
         self.min = mn
         self.max = mx
+        self.val_error = 0
 
         self.int_val = self.last_int_val = self.last_error = 0.
+
+
+    def getval_error(self):
+        return self.val_error
+
+
+    def set(self,kp,ki,kd):
+        self.kp = kp
+        self.ki = ki
+        self.kd = kd
 
     def reset(self):
         self.int_val = 0.0
@@ -33,5 +43,7 @@ class PID(object):
         else:
             self.int_val = integral
         self.last_error = error
+
+        self.val_error = error
 
         return val
