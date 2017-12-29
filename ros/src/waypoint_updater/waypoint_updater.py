@@ -56,11 +56,6 @@ class WaypointUpdater(object):
 	# the allowed maximal velocity 
 	## We possibly need to recalculate this if we wish to give test on test lot
 	self.max_velocity = self.kmph2mps(rospy.get_param('/waypoint_loader/velocity'))
-	# previous traffic status, it can be 
-	#	None : not clear
-	#	True : Red/Yellow
-	#	False: Green
-	self.previous_state = None
 	# This is the real lookahead value we are going to use for publishing
 	self.LOOKAHEAD_WPS = LOOKAHEAD_WPS_INIT
 	# flag up if LOOP is True and the car is approaching the destination
@@ -127,7 +122,6 @@ class WaypointUpdater(object):
 	if stop_line < 0:
 	    #rospy.logwarn('>>>GREEN LIGHT or NONE<<<')
 	    self.accelerate(acceleration=1.0)
-	    #self.previous_state = False
 	else: 
 	    # present: Red/Yellow light detected
 	    if self.arriving:
@@ -138,19 +132,16 @@ class WaypointUpdater(object):
 	    if 0 <= stop_index < self.LOOKAHEAD_WPS:
 		#rospy.logwarn('decelerate is required to use')
 	        self.decelerate(stop_index)
-	        #self.previous_state = True
 	    elif stop_index >= self.LOOKAHEAD_WPS:
 		#rospy.logwarn('stop_index >= self.LOOKAHEAD_WPS')
 	        # red/yellow light was detected, but within a safe distance. 
 		self.accelerate(acceleration=0.5) 
-		#self.previous_state = False
 	    else:
 		#rospy.logwarn('stop_index < 0')
 		if self.arriving:
 		    # stop anyway
 		    return		
 		self.accelerate(acceleration=1.0)
-	        #self.previous_state = False
 	if self.arriving:
 	    self.print_velocities()
 
