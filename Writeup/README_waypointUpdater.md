@@ -24,7 +24,7 @@ In detail, if the current waypoints list is empty, then it is updated with the b
 
 
 ### 3.2. Flowchart
-
+![](https://github.com/fangchun007/CarND-Capstone/blob/master/Writeup/WaypointUpdater_Final_v3.jpg)
 
 ### 3.3. Code
 
