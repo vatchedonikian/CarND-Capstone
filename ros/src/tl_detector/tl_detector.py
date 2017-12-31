@@ -182,6 +182,10 @@ class TLDetector(object):
     def base_waypoints_cb(self, waypoints):
         self.base_waypoints_list = waypoints.waypoints
 	self.num_base_waypoints = len(self.base_waypoints_list)
+	if self.num_base_waypoints > 200:
+	    self.early_warning_distance = 80
+	else:
+	    self.early_warning_distance = 20
 
     def traffic_cb(self, msg):
 	# self.lights contains list of traffic lights, including pose and state info
