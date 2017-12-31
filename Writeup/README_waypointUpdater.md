@@ -5,13 +5,13 @@ The waypoint updater node belongs to the planning system of a self-driving car. 
 ## Input and Output / Subscribers and Publishers
 
 ### Input/Subscribers
-    * /base_waypoints
-    * /traffic_waypoint
-    * /current_pose
-    * /current_velocity
+* /base_waypoints
+* /traffic_waypoint
+* /current_pose
+* /current_velocity
     
 ### Output/Publisher
-    * /final_waypoints
+* /final_waypoints
 
 ## Waypoint Updater Node Implementation
 
