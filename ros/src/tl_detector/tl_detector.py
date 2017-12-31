@@ -17,7 +17,7 @@ STATE_COUNT_THRESHOLD = 3
 PUBLISH_RATE = 30
 USE_CLASSIFIER = True
 USE_SIMULATER = True
-EARLY_WARNING_DISTANCE = 80 # > 11*11/2  2.8*2.8/2
+#EARLY_WARNING_DISTANCE = 80 # > 11*11/2  2.8*2.8/2
 
 class TLDetector(object):
     def __init__(self):
@@ -40,7 +40,8 @@ class TLDetector(object):
         self.lights = []
 	# early warning distance, it should be depend on the current velocity
 	# In the present version, this is not implemented yet.
-	self.early_warning_distance = EARLY_WARNING_DISTANCE
+	#self.early_warning_distance = EARLY_WARNING_DISTANCE
+	self.early_warning_distance = None
 	# current velocity with initiate value None
 	# it is not used in present version
 	self.current_velocity = None
