@@ -1,4 +1,7 @@
 ## Recent Changes
+ * Time 31.12.2017
+   Issue: modified tl_detector.py so that it can set early warn distance value.
+
  * Time 23.12.2017
  
    Issue: [unity_simulator-3] process has died
