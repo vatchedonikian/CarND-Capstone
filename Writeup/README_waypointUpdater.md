@@ -2,7 +2,7 @@
 
 The waypoint updater node belongs to the planning system of a self-driving car. It is designed to publish a fixed number of waypoints ahead the vehicle with the correct target velocities for the car to follow. Naturally, the final published waypoints should depend on the status of the car itself and environments around it such as traffic lights and obstacles. As a result, it tells the car when and how to accelerate or deaccelerate depending on all those considerations.
 
-## Input and Output / Subscribers and Publishers
+## Input/Subscribers and Output/Publishers
 
 ### Input/Subscribers
 * /base_waypoints
